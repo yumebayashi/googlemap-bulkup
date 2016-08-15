@@ -1,4 +1,5 @@
 # googlemap-bulkup
+Just paste your location data to map it:
 
 ## How to use
 ### 1
