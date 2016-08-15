@@ -13,7 +13,7 @@ csv format
 latitude, longitude [,name [, (red|orange|yellow|green|blue)]]
 ex1) 32.1234, 135.2234
 ex2) 32.1234, 135.2234, hoge
-ex3) 32.1234, 135.2234, blue
+ex3) 32.1234, 135.2234, hoge, blue
 ```
 
 ### 3
