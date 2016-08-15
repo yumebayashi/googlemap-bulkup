@@ -27,7 +27,6 @@
 
 <body>
     <div id="map"></div>
-    <img src="marker.png" height="30px">
     <div id="csvArea">
         <input id="apiKey" type=”text” placeholder="api key" size="50">
         <button id="register">Register</button>
@@ -40,6 +39,13 @@
     <script type="text/javascript">
     var map;
     var icons = new Map();
+    var points = [];
+    var polyLineOptions = {
+        path: null,
+        strokeWeight: 4,
+        strokeColor: "black",
+        strokeOpacity: "0.8"
+    };
     var initMap = function() {
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 8,
@@ -75,6 +81,37 @@
             scaledSize: new google.maps.Size(30, 30),
             anchor: new google.maps.Point(15, 30)
         });
+
+        google.maps.event.addListener(map, "click", function(e) {
+            showDistance(e);
+        })
+    }
+
+    var showDistance = function(e) {
+        points.push(e.latLng);
+
+        if (points.length > 1) {
+            polyLineOptions.path = points;
+
+            var poly = new google.maps.Polyline(polyLineOptions);
+            google.maps.event.addListener(poly, "click", function(e) {
+                poly.setMap(null);
+            });
+            poly.setMap(map);
+
+            var distance = google.maps.geometry.spherical.computeDistanceBetween(points[0], points[1]);
+            var mLat = (points[0].lat() + points[1].lat()) / 2;
+            var mLng = (points[0].lng() + points[1].lng()) / 2;
+            var infoWindow = new google.maps.InfoWindow({
+                content: Math.floor(distance) + " m",
+                position: new google.maps.LatLng(mLat, mLng)
+            });
+            infoWindow.setMap(map);
+            google.maps.event.addListener(infoWindow, "closeclick", function() {
+                poly.setMap(null);
+            });
+            points.length = 0;
+        }
     }
 
     function AddMarker(columnNum) {
@@ -98,10 +135,13 @@
             title: name,
             icon: icons.get(color)
         });
+        google.maps.event.addListener(marker, "click", function(e) {
+            showDistance(e);
+        });
     }
     $(function() {
         $("#register").click(function() {
-            $("body").append($("<script async defer src=\"https://maps.googleapis.com/maps/api/js?key=" + $("#apiKey").val() + "&callback=initMap\"><\/script>"));
+            $("body").append($("<script async defer src=\"https://maps.googleapis.com/maps/api/js?key=" + $("#apiKey").val() + "&callback=initMap&libraries=geometry\"><\/script>"));
         });
         $("#addMarkers").click(function() {
             var list = $("#csv").val().split("\n");
