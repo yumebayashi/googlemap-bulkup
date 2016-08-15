@@ -84,10 +84,10 @@
         var name = "";
         var color = "red";
         if (this.columnNum > 3) {
-            name = data[2];
-            color = data[3];
+            name = data[2].trim();
+            color = data[3].trim();
         } else if (this.columnNum > 2) {
-            name = data[2];
+            name = data[2].trim();
         }
         var marker = new google.maps.Marker({
             map: map,
