@@ -141,7 +141,9 @@
     }
     $(function() {
         $("#register").click(function() {
-            $("body").append($("<script async defer src=\"https://maps.googleapis.com/maps/api/js?key=" + $("#apiKey").val() + "&callback=initMap&libraries=geometry\"><\/script>"));
+            var apiKey = $("#apiKey").val();
+            localStorage.setItem("apiKey", apiKey);
+            $("body").append($("<script async defer src=\"https://maps.googleapis.com/maps/api/js?key=" + apiKey + "&callback=initMap&libraries=geometry\"><\/script>"));
         });
         $("#addMarkers").click(function() {
             var list = $("#csv").val().split("\n");
@@ -150,6 +152,7 @@
                 addMarker.add(list[i].split(","));
             }
         });
+        $("#apiKey").val(localStorage.getItem("apiKey"));
     });
     </script>
 </body>
