@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bulk Check</title>
+    <style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    
+    #map {
+        height: 100%;
+    }
+    
+    #csvArea {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        z-index: 100
+    }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="map"></div>
+    <img src="marker.png" height="30px">
+    <div id="csvArea">
+        <input id="apiKey" type=”text” placeholder="api key" size="50">
+        <button id="register">Register</button>
+        <br>
+        <br>
+        <textarea id="csv" rows="2" cols="55" placeholder="latitude, longitude [,name [, (red|orange|yellow|green|blue)]]"></textarea>
+        <br>
+        <button id="addMarkers">Add</button>
+    </div>
+    <script type="text/javascript">
+    var map;
+    var icons = new Map();
+    var initMap = function() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 8,
+            center: {
+                lat: 35.6841,
+                lng: 139.7524
+            },
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: false
+        });
+        icons.set("red", {
+            url: "red.png",
+            scaledSize: new google.maps.Size(30, 30),
+            anchor: new google.maps.Point(15, 30)
+        });
+        icons.set("blue", {
+            url: "blue.png",
+            scaledSize: new google.maps.Size(30, 30),
+            anchor: new google.maps.Point(15, 30)
+        });
+        icons.set("yellow", {
+            url: "yellow.png",
+            scaledSize: new google.maps.Size(30, 30),
+            anchor: new google.maps.Point(15, 30)
+        });
+        icons.set("orange", {
+            url: "orange.png",
+            scaledSize: new google.maps.Size(30, 30),
+            anchor: new google.maps.Point(15, 30)
+        });
+        icons.set("green", {
+            url: "green.png",
+            scaledSize: new google.maps.Size(30, 30),
+            anchor: new google.maps.Point(15, 30)
+        });
+    }
+
+    function AddMarker(columnNum) {
+        this.columnNum = columnNum;
+    }
+    AddMarker.prototype.add = function(data) {
+        var name = "";
+        var color = "red";
+        if (this.columnNum > 3) {
+            name = data[2];
+            color = data[3];
+        } else if (this.columnNum > 2) {
+            name = data[2];
+        }
+        var marker = new google.maps.Marker({
+            map: map,
+            position: {
+                lat: Number(data[0]),
+                lng: Number(data[1])
+            },
+            title: name,
+            icon: icons.get(color)
+        });
+    }
+    $(function() {
+        $("#register").click(function() {
+            $("body").append($("<script async defer src=\"https://maps.googleapis.com/maps/api/js?key=" + $("#apiKey").val() + "&callback=initMap\"><\/script>"));
+        });
+        $("#addMarkers").click(function() {
+            var list = $("#csv").val().split("\n");
+            var addMarker = new AddMarker(list[0].split(",").length);
+            for (var i in list) {
+                addMarker.add(list[i].split(","));
+            }
+        });
+    });
+    </script>
+</body>
+
+</html>
