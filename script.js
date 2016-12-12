@@ -109,22 +109,22 @@
         $("#addMarkers").click(function() {
             var list = $("#csv").val().split("\n");
             var addMarker = new AddMarker(list[0].split(",").length);
-            var latMin = 360;
-            var latMax = -360;
-            var lonMin = 360;
-            var lonMax = -360;
+            //var latMin = 360;
+            //var latMax = -360;
+            //var lonMin = 360;
+            //var lonMax = -360;
             for (var i in list) {
                 var d = list[i].split(",");
                 addMarker.add(d);
-                latMin = Math.min(latMin, Number(d[0]));
-                latMax = Math.max(latMax, Number(d[0]));
-                lonMin = Math.min(lonMin, Number(d[1]));
-                lonMax = Math.max(lonMax, Number(d[1]));
+               // latMin = Math.min(latMin, Number(d[0]));
+               // latMax = Math.max(latMax, Number(d[0]));
+               // lonMin = Math.min(lonMin, Number(d[1]));
+               // lonMax = Math.max(lonMax, Number(d[1]));
             }
-            var sw = new google.maps.LatLng(latMin, lonMin) ;
-            var ne = new google.maps.LatLng(latMax, lonMax) ;
-            var latlngBounds = new google.maps.LatLngBounds( sw , ne ) ;
-            map.fitBounds(latlngBounds);
+            //var sw = new google.maps.LatLng(latMin, lonMin) ;
+            //var ne = new google.maps.LatLng(latMax, lonMax) ;
+            //var latlngBounds = new google.maps.LatLngBounds( sw , ne ) ;
+            //map.fitBounds(latlngBounds);
         });
         $("#apiKey").val(localStorage.getItem("apiKey"));
     });
