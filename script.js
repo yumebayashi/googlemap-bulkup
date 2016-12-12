@@ -109,9 +109,9 @@
         $("#addMarkers").click(function() {
             var list = $("#csv").val().split("\n");
             var addMarker = new AddMarker(list[0].split(",").length);
-            var latMin = 0;
+            var latMin = 999;
             var latMax = 0;
-            var lonMin = 0;
+            var lonMin = 999;
             var lonMax = 0;
             for (var i in list) {
                 var d = list[i].split(",");
