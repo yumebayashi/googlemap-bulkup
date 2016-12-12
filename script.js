@@ -116,10 +116,10 @@
             for (var i in list) {
                 var d = list[i].split(",");
                 addMarker.add(d);
-                latMin = Math.min(latMin, d[0]);
-                latMax = Math.max(latMax, d[0]);
-                lonMin = Math.min(lonMin, d[1]);
-                lonMax = Math.max(lonMax, d[1]);
+                latMin = Math.min(latMin, Number(d[0]));
+                latMax = Math.max(latMax, Number(d[0]));
+                lonMin = Math.min(lonMin, Number(d[1]));
+                lonMax = Math.max(lonMax, Number(d[1]));
             }
             var sw = new google.maps.LatLng(latMin, lonMin) ;
             var ne = new google.maps.LatLng(latMax, lonMax) ;
