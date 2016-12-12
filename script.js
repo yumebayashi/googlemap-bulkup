@@ -109,9 +109,19 @@
         $("#addMarkers").click(function() {
             var list = $("#csv").val().split("\n");
             var addMarker = new AddMarker(list[0].split(",").length);
+            var latMin,latMax,lonMin,lonMax;
             for (var i in list) {
-                addMarker.add(list[i].split(","));
+                var d = list[i].split(",");
+                addMarker.add(d);
+                latMin = Math.min(latMin, d[0]);
+                latMax = Math.max(latMax, d[0]);
+                lonMin = Math.min(lonMin, d[1]);
+                lonMax = Math.man(lonMax, d[1]);
             }
+            var sw = new google.maps.LatLng(latMin, lonMin) ;
+            var ne = new google.maps.LatLng(latMax, lonMax) ;
+            var latlngBounds = new google.maps.LatLngBounds( sw , ne ) ;
+            map.fitBounds(latlngBounds);
         });
         $("#apiKey").val(localStorage.getItem("apiKey"));
     });
