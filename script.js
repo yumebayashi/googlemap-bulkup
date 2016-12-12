@@ -74,6 +74,7 @@
             points.length = 0;
         }
     }
+    var markers = [];
 
     function AddMarker(columnNum) {
         this.columnNum = columnNum;
@@ -96,35 +97,35 @@
             title: name,
             icon: icons.get(color)
         });
+        markers.push(marker);
         google.maps.event.addListener(marker, "click", function(e) {
             showDistance(e);
         });
     }
+
+    function register() {
+        var apiKey = $("#apiKey").val();
+        localStorage.setItem("apiKey", apiKey);
+        $("body").append($("<script async defer src=\"https://maps.googleapis.com/maps/api/js?key=" + apiKey + "&callback=initMap&libraries=geometry\"><\/script>"));
+    }
     $(function() {
         $("#register").click(function() {
-            var apiKey = $("#apiKey").val();
-            localStorage.setItem("apiKey", apiKey);
-            $("body").append($("<script async defer src=\"https://maps.googleapis.com/maps/api/js?key=" + apiKey + "&callback=initMap&libraries=geometry\"><\/script>"));
+            register();
         });
         $("#addMarkers").click(function() {
             var list = $("#csv").val().split("\n");
             var addMarker = new AddMarker(list[0].split(",").length);
-            var latMin = 360;
-            var latMax = -360;
-            var lonMin = 360;
-            var lonMax = -360;
             for (var i in list) {
                 var d = list[i].split(",");
                 addMarker.add(d);
-                latMin = Math.min(latMin, Number(d[0]));
-                latMax = Math.max(latMax, Number(d[0]));
-                lonMin = Math.min(lonMin, Number(d[1]));
-                lonMax = Math.max(lonMax, Number(d[1]));
             }
-            var sw = new google.maps.LatLng(latMin, lonMin) ;
-            var ne = new google.maps.LatLng(latMax, lonMax) ;
-            var latlngBounds = new google.maps.LatLngBounds( sw , ne ) ;
-            map.fitBounds(latlngBounds);
+        });
+        $("#delMarkers").click(function() {
+            for (var i in markers) {
+                markers[i].setMap(null);
+            }
+            markers = [];
         });
         $("#apiKey").val(localStorage.getItem("apiKey"));
+        register();
     });
