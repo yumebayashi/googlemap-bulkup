@@ -1,5 +1,4 @@
     var map;
-    var icons = new Map();
     var points = [];
     var polyLineOptions = {
         path: null,
@@ -17,35 +16,9 @@
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             mapTypeControl: false
         });
-        icons.set("red", {
-            url: "red.png",
-            scaledSize: new google.maps.Size(30, 30),
-            anchor: new google.maps.Point(15, 30)
-        });
-        icons.set("blue", {
-            url: "blue.png",
-            scaledSize: new google.maps.Size(30, 30),
-            anchor: new google.maps.Point(15, 30)
-        });
-        icons.set("yellow", {
-            url: "yellow.png",
-            scaledSize: new google.maps.Size(30, 30),
-            anchor: new google.maps.Point(15, 30)
-        });
-        icons.set("orange", {
-            url: "orange.png",
-            scaledSize: new google.maps.Size(30, 30),
-            anchor: new google.maps.Point(15, 30)
-        });
-        icons.set("green", {
-            url: "green.png",
-            scaledSize: new google.maps.Size(30, 30),
-            anchor: new google.maps.Point(15, 30)
-        });
-
-        google.maps.event.addListener(map, "click", function(e) {
-            showDistance(e);
-        })
+        // google.maps.event.addListener(map, "click", function(e) {
+        //     showDistance(e);
+        // })
     }
 
     var showDistance = function(e) {
@@ -80,14 +53,16 @@
         this.columnNum = columnNum;
     }
     AddMarker.prototype.add = function(data) {
+        if (data == "") return;
         var name = "";
-        var color = "red";
+        var color = "";
         if (this.columnNum > 3) {
             name = data[2].trim();
             color = data[3].trim();
         } else if (this.columnNum > 2) {
             name = data[2].trim();
         }
+        var color = "hsl(" + parseInt(string_to_utf8_hex_string(color.slice(0, 3)), 16) % 360 + ", 100%, 40%)";
         var marker = new google.maps.Marker({
             map: map,
             position: {
@@ -95,7 +70,13 @@
                 lng: Number(data[1])
             },
             title: name,
-            icon: icons.get(color)
+            icon: {
+                path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                scale: 5,
+                fillColor: color,
+                fillOpacity: 0.8,
+                strokeWeight: 2
+            }
         });
         markers.push(marker);
         google.maps.event.addListener(marker, "click", function(e) {
@@ -129,3 +110,44 @@
         $("#apiKey").val(localStorage.getItem("apiKey"));
         register();
     });
+
+    function string_to_utf8_hex_string(text) {
+        var bytes1 = string_to_utf8_bytes(text);
+        var hex_str1 = bytes_to_hex_string(bytes1);
+        return hex_str1;
+    }
+
+    function string_to_utf8_bytes(text) {
+        var result = [];
+        if (text == null)
+            return result;
+        for (var i = 0; i < text.length; i++) {
+            var c = text.charCodeAt(i);
+            if (c <= 0x7f) {
+                result.push(c);
+            } else if (c <= 0x07ff) {
+                result.push(((c >> 6) & 0x1F) | 0xC0);
+                result.push((c & 0x3F) | 0x80);
+            } else {
+                result.push(((c >> 12) & 0x0F) | 0xE0);
+                result.push(((c >> 6) & 0x3F) | 0x80);
+                result.push((c & 0x3F) | 0x80);
+            }
+        }
+        return result;
+    }
+
+    function bytes_to_hex_string(bytes) {
+        var result = "";
+
+        for (var i = 0; i < bytes.length; i++) {
+            result += byte_to_hex(bytes[i]);
+        }
+        return result;
+    }
+
+    function byte_to_hex(byte_num) {
+        var digits = (byte_num).toString(16);
+        if (byte_num < 16) return '0' + digits;
+        return digits;
+    }
