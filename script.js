@@ -62,7 +62,7 @@
         } else if (this.columnNum > 2) {
             name = data[2].trim();
         }
-        var color = "hsl(" + parseInt(string_to_utf8_hex_string(color.slice(0, 3)), 16) % 360 + ", 100%, 40%)";
+        var color = "hsl(" + parseInt(string_to_utf8_hex_string(color.slice(0, 3)), 16) % 360 + ", 100%, 60%)";
         var marker = new google.maps.Marker({
             map: map,
             position: {
