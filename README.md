@@ -10,10 +10,10 @@ Just paste your location data to map it:
 
 csv format
 ```
-latitude, longitude [,name [, (red|orange|yellow|green|blue)]]
+latitude, longitude [,label [,color(calculate by first three characters)]]
 ex1) 32.1234, 135.2234
 ex2) 32.1234, 135.2234, hoge
-ex3) 32.1234, 135.2234, hoge, blue
+ex3) 32.1234, 135.2234, hoge, xxx
 ```
 
 ### tips
