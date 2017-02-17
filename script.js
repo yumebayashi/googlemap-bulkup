@@ -56,13 +56,12 @@
         if (data == "") return;
         var name = "";
         var color = "";
-        if (this.columnNum > 3) {
+        
+        if (this.columnNum > 2) {
             name = data[2].trim();
-            color = data[3].trim();
-        } else if (this.columnNum > 2) {
-            name = data[2].trim();
+            color = "hsl(" + parseInt(string_to_utf8_hex_string(name.slice(0, 3)), 16) % 360 + ", 100%, 60%)";
         }
-        var color = "hsl(" + parseInt(string_to_utf8_hex_string(color.slice(0, 3)), 16) % 360 + ", 100%, 60%)";
+        
         var marker = new google.maps.Marker({
             map: map,
             position: {
