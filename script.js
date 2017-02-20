@@ -61,6 +61,10 @@
             name = data[2].trim();
             color = "hsl(" + parseInt(string_to_utf8_hex_string(name.slice(0, 3)), 16) % 360 + ", 100%, 60%)";
         }
+        if (this.columnNum > 3) {
+            name = data[3].trim();
+            color = "hsl(" + parseInt(string_to_utf8_hex_string(data[2].trim().slice(0, 3)), 16) % 360 + ", 100%, 60%)";
+        }
         
         var marker = new google.maps.Marker({
             map: map,
